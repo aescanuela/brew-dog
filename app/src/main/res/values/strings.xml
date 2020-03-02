@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BrewDog</string>
+    <string name="abv_percentage">ABV: %1$.1f %%</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="search">Buscar</string>
+    <string name="order_lighter_first">Más suaves primero</string>
+    <string name="order_stronger_first">Más fuertes primero</string>
+    <string name="search_hint">Buscar por comida</string>
+    <string name="number_results">Hay %1$d resultados:</string>
+    <string name="no_results">No hay cervezas que encajen con esta comida :-(</string>
+</resources>
