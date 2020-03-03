@@ -9,17 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import es.soprasteria.brewdog.R
 import es.soprasteria.brewdog.constants.AppConstants
 import es.soprasteria.brewdog.model.Beer
+import es.soprasteria.brewdog.networking.DownloadImageTask
 import java.util.*
 
 
 class BeersAdapter(
     private val mContext: Context,
-    private val mBeers: ArrayList<Beer>
+    private val mBeers: ArrayList<Beer>,
+    private val listener: BeerAdapterListener
 ) :
     RecyclerView.Adapter<BeersAdapter.ViewHolder>() {
 
@@ -29,6 +32,11 @@ class BeersAdapter(
 
     private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
     private var mLastOrder = AppConstants.ASCENDING
+
+    interface BeerAdapterListener {
+        fun onBeerClicked(beer: Beer)
+    }
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,7 +52,6 @@ class BeersAdapter(
         val beer = mBeers[position]
         holder.nameTextView.text = beer.name
         holder.taglineTextView.text = beer.tagline
-        holder.descriptionTextView.text = beer.description
         holder.abvTextView.text =
             mContext.getString(R.string.abv_percentage, beer.abv ?: 0.0)
 
@@ -59,15 +66,20 @@ class BeersAdapter(
         if (beer.imageUrl != null) {
             DownloadImageTask(holder.iconImageView, beer.imageUrl!!).execute()
         }
+
+        holder.parentLayout.setOnClickListener {
+            listener.onBeerClicked(beer)
+        }
+
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        var parentLayout: ConstraintLayout = itemView.findViewById(R.id.beer_item_parent_layout)
         var iconImageView: ImageView = itemView.findViewById(R.id.beer_item_icon)
         var nameTextView: TextView = itemView.findViewById(R.id.beer_item_name)
         var taglineTextView: TextView = itemView.findViewById(R.id.beer_item_tagline)
-        var descriptionTextView: TextView = itemView.findViewById(R.id.beer_item_description)
         var abvTextView: TextView = itemView.findViewById(R.id.beer_item_abv)
     }
 
@@ -89,30 +101,6 @@ class BeersAdapter(
     }
 
 
-    private inner class DownloadImageTask(
-        internal var imageView: ImageView,
-        internal var urlToDisplay: String
-    ) :
-        AsyncTask<String, Void, Bitmap?>() {
-
-        override fun doInBackground(vararg urls: String): Bitmap? {
-            // FIXME: Guardar imagenes en disco?
-            var bmp: Bitmap? = null
-            try {
-                val `in` = java.net.URL(urlToDisplay).openStream()
-                bmp = BitmapFactory.decodeStream(`in`)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return bmp
-        }
-
-        override fun onPostExecute(result: Bitmap?) {
-            if (result != null) {
-                imageView.setImageBitmap(result)
-            }
-        }
-    }
 
 
 }

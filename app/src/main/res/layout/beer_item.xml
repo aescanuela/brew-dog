@@ -3,8 +3,7 @@
     android:id="@+id/beer_item_parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-   >
+    android:background="@android:color/white">
 
     <ImageView
         android:id="@+id/beer_item_icon"
@@ -24,7 +23,7 @@
         android:lines="1"
         android:text="@string/placeholder"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/text_size_medium"
+        android:textSize="@dimen/text_size_small"
         app:layout_constraintBottom_toTopOf="@id/beer_item_tagline"
         app:layout_constraintEnd_toStartOf="@id/beer_item_abv"
         app:layout_constraintStart_toEndOf="@id/beer_item_icon"
@@ -37,25 +36,11 @@
         android:layout_marginTop="@dimen/padding_medium"
         android:text="@string/placeholder"
         android:textSize="@dimen/text_size_small"
-        app:layout_constraintBottom_toTopOf="@id/beer_item_description"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/beer_item_name"
         app:layout_constraintTop_toBottomOf="@id/beer_item_name" />
 
-    <TextView
-        android:id="@+id/beer_item_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_medium"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:text="@string/placeholder"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/beer_item_name"
-        app:layout_constraintTop_toBottomOf="@id/beer_item_tagline" />
 
     <TextView
         android:id="@+id/beer_item_abv"

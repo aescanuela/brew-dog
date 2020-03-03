@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detail_activity_parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.detail.DetailActivity">
+
+    <ImageView
+        android:id="@+id/detail_activity_image"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/detail_image_height"
+        android:padding="@dimen/margin_small"
+        android:scaleType="centerInside"
+        android:src="@drawable/notfound"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/detail_activity_avb_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ASDF"
+        app:layout_constraintEnd_toEndOf="@+id/detail_activity_image"
+        app:layout_constraintTop_toBottomOf="@+id/detail_activity_image" />
+
+    <TextView
+        android:id="@+id/detail_activity_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ASDF"
+        app:layout_constraintStart_toStartOf="@+id/detail_activity_image"
+        app:layout_constraintTop_toBottomOf="@+id/detail_activity_image" />
+
+    <TextView
+        android:id="@+id/detail_activity_tagline_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ASDF"
+        app:layout_constraintStart_toStartOf="@+id/detail_activity_name_text"
+        app:layout_constraintTop_toBottomOf="@+id/detail_activity_name_text" />
+
+    <TextView
+        android:id="@+id/detail_activity_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF ASDF "
+        app:layout_constraintStart_toStartOf="@+id/detail_activity_tagline_text"
+        app:layout_constraintTop_toBottomOf="@+id/detail_activity_tagline_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

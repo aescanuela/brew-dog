@@ -1,20 +1,16 @@
-package es.soprasteria.brewdog
+package es.soprasteria.brewdog.ui.main
 
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import es.soprasteria.brewdog.R
 import es.soprasteria.brewdog.constants.AppConstants
-import es.soprasteria.brewdog.ui.main.MainFragment
-import es.soprasteria.brewdog.ui.main.MainViewModel
 
 
 class MainActivity : AppCompatActivity() {

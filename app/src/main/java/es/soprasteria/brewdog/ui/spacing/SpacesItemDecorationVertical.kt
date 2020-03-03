@@ -1,11 +1,11 @@
-package es.soprasteria.brewdog.ui.main.spacing
+package es.soprasteria.brewdog.ui.spacing
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 
-class SpacesItemDecorationVerticalLinearLayout(
+class SpacesItemDecorationVertical(
     private val spaceTopBottom: Int,
     private val spaceBetweenElements: Int,
     private val spaceLeftRight: Int

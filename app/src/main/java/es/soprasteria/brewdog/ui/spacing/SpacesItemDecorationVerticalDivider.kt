@@ -26,38 +26,10 @@ class SpacesItemDecorationVerticalDivider(
     ) {
         val childCount = parent.childCount
         for (i in 0 until childCount) {
-            if (i == 0) {
+            if (i != 0) {
                 drawTopDivider(c, parent, i)
-                drawBottomDivider(c, parent, i)
-            } else {
-                drawBottomDivider(c, parent, i)
             }
         }
-    }
-
-
-    private fun drawBottomDivider(c: Canvas, parent: RecyclerView, i: Int) {
-
-        val child = parent.getChildAt(i)
-
-        val params = child.layoutParams as RecyclerView.LayoutParams
-
-        val left = spaceLeftRight
-        val right = parent.width - spaceLeftRight
-
-        val verticalSpace = if (i == parent.childCount - 1) {
-            // Last element
-            spaceTopBottom
-        } else {
-            spaceBetweenElements
-        }
-
-        val top = child.bottom + params.bottomMargin + (verticalSpace / 2)
-
-        val bottom: Int = top + mDivider.intrinsicHeight
-
-        mDivider.setBounds(left, top, right, bottom)
-        mDivider.draw(c)
     }
 
 

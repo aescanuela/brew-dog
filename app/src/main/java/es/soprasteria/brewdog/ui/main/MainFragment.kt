@@ -1,5 +1,6 @@
 package es.soprasteria.brewdog.ui.main
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import es.inmovens.selyco.ui.adapters.spacing.SpacesItemDecorationVerticalDivider
 import es.soprasteria.brewdog.R
-import es.soprasteria.brewdog.ui.main.spacing.SpacesItemDecorationVerticalLinearLayout
+import es.soprasteria.brewdog.constants.AppConstants
+import es.soprasteria.brewdog.model.Beer
+import es.soprasteria.brewdog.ui.detail.DetailActivity
+import es.soprasteria.brewdog.ui.spacing.SpacesItemDecorationVertical
 import kotlinx.android.synthetic.main.main_fragment.*
 
 
@@ -68,7 +72,18 @@ class MainFragment : Fragment() {
             layoutManager.orientation = RecyclerView.VERTICAL
             main_fragment_beer_recycler.layoutManager = layoutManager
 
-            beersAdapter = BeersAdapter(context!!, arrayListOf())
+
+
+            beersAdapter = BeersAdapter(
+                context!!,
+                arrayListOf(),
+                listener = object : BeersAdapter.BeerAdapterListener {
+                    override fun onBeerClicked(beer: Beer) {
+                        val intent = Intent(activity, DetailActivity::class.java)
+                        intent.putExtra(AppConstants.INTENT_EXTRA_BEER, beer)
+                        startActivity(intent)
+                    }
+                })
 
             main_fragment_beer_recycler.adapter = beersAdapter
 
@@ -78,7 +93,7 @@ class MainFragment : Fragment() {
             val topBottomSpace = resources.getDimensionPixelSize(R.dimen.margin_small)
             val leftRightSpace = resources.getDimensionPixelSize(R.dimen.margin_small)
 
-            val dividerItemDecoration2 = SpacesItemDecorationVerticalLinearLayout(
+            val dividerItemDecoration2 = SpacesItemDecorationVertical(
                 topBottomSpace,
                 spacingInPixels * 2,
                 leftRightSpace
