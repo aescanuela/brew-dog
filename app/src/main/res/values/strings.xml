@@ -1,12 +1,11 @@
 <resources>
-    <string name="app_name">BrewDog</string>
+    <string name="app_name">Brew Dog</string>
     <string name="abv_percentage">ABV: %1$.1f %%</string>
-    <string name="placeholder">Placeholder</string>
-    <string name="search">Buscar</string>
-    <string name="order_lighter_first">Más suaves primero</string>
-    <string name="order_stronger_first">Más fuertes primero</string>
-    <string name="search_hint">Buscar por comida</string>
-    <string name="number_results">Hay %1$d resultados:</string>
-    <string name="no_results">No hay cervezas que encajen con esta comida :-(</string>
+    <string name="placeholder"></string>
+    <string name="search">Search</string>
+    <string name="order_lighter_first">Lighter first</string>
+    <string name="order_stronger_first">Stronger first</string>
+    <string name="search_hint">Search by food</string>
+    <string name="no_results">We were no able to find results :-(</string>
     <string name="error_getting_beer">Error getting beer</string>
 </resources>

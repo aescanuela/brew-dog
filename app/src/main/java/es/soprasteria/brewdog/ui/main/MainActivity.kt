@@ -13,35 +13,41 @@ import es.soprasteria.brewdog.R
 import es.soprasteria.brewdog.constants.AppConstants
 
 
+/**
+ * First Activity that show the list of beers
+ */
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = MainActivity::class.java.simpleName
 
-
+    // Instance of the fragment shown
     var fragmentInstance: MainFragment? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.activity_main)
+
+        // Set the first fragment
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitNow()
         }
+
+        // Handle search intent
         handleIntent(intent)
-
-
-
     }
+
 
     override fun onAttachFragment(fragment: Fragment) {
         super.onAttachFragment(fragment)
+
+        // Save the fragment attached
         if (fragment is MainFragment) {
             fragmentInstance = fragment
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -51,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         (menu?.findItem(R.id.app_bar_search)?.actionView as SearchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
 
+            // Accept also empty queries (so we can show entire list again after user deletes query String)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     if (query.equals("")) {
@@ -67,12 +74,12 @@ class MainActivity : AppCompatActivity() {
                     }
                     return false
                 }
-
             })
         }
 
         return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -80,17 +87,18 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.app_bar_lighter_first -> {
-                fragmentInstance?.orderList(AppConstants.ASCENDING)
+                fragmentInstance?.orderList(AppConstants.Direction.ASCENDING)
                 true
             }
             R.id.app_bar_stronger_first -> {
-                fragmentInstance?.orderList(AppConstants.DESCENDING)
+                fragmentInstance?.orderList(AppConstants.Direction.DESCENDING)
                 true
             }
             else -> super.onOptionsItemSelected(item)
 
         }
     }
+
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
@@ -99,8 +107,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleIntent(intent: Intent) {
 
+    private fun handleIntent(intent: Intent) {
+        // Handle search Intent
         if (Intent.ACTION_SEARCH == intent.action) {
             val query = intent.getStringExtra(SearchManager.QUERY)
             fragmentInstance?.search(query)

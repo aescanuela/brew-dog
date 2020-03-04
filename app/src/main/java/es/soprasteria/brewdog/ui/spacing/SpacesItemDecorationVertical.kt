@@ -5,6 +5,9 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 
+/**
+ * Manage space between items in recycler view
+ */
 class SpacesItemDecorationVertical(
     private val spaceTopBottom: Int,
     private val spaceBetweenElements: Int,

@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import es.soprasteria.brewdog.R
 
 
+/**
+ * Draw a line between items in recycler view
+ */
 class SpacesItemDecorationVerticalDivider(
     private val context: Context,
     private val spaceTopBottom: Int,

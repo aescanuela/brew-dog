@@ -1,7 +1,6 @@
 package es.soprasteria.brewdog.ui.main
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,9 +17,12 @@ import es.soprasteria.brewdog.constants.AppConstants
 import es.soprasteria.brewdog.model.Beer
 import es.soprasteria.brewdog.ui.detail.DetailActivity
 import es.soprasteria.brewdog.ui.spacing.SpacesItemDecorationVertical
-import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.fragment_main.*
 
 
+/**
+ * Main fragment to show list of beers
+ */
 class MainFragment : Fragment() {
 
     private val TAG = MainFragment::class.java.simpleName
@@ -32,12 +34,14 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private lateinit var beersAdapter: BeersAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_main, container, false)
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -46,19 +50,22 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.init()
 
-        // Initialize call for all beers (TODO: Should paginate first time?)
+        // Initialize list with a call for all beers, and observe any result to update list
         viewModel.getBeersRepository()!!.observe(viewLifecycleOwner, Observer { data ->
             try {
-                Log.d(TAG, "Received data: ${data.size}")
+                Log.d(TAG, "Received data: ${data.size} items")
 
                 if (data.isNullOrEmpty()) {
+
+                    // Show string saying that there are no results
                     main_fragment_beer_recycler.visibility = View.GONE
                     main_fragment_empty_message.visibility = View.VISIBLE
 
                 } else {
+
+                    // Update adapter
                     main_fragment_beer_recycler.visibility = View.VISIBLE
                     main_fragment_empty_message.visibility = View.GONE
-
                     beersAdapter.setBeers(data)
                 }
             } catch (e: Exception) {
@@ -68,12 +75,13 @@ class MainFragment : Fragment() {
 
         // Prepare Adapter
         if (context != null) {
+
+            // Adapter layout
             val layoutManager = LinearLayoutManager(context)
             layoutManager.orientation = RecyclerView.VERTICAL
             main_fragment_beer_recycler.layoutManager = layoutManager
 
-
-
+            // Create and assign adapter
             beersAdapter = BeersAdapter(
                 context!!,
                 arrayListOf(),
@@ -87,7 +95,7 @@ class MainFragment : Fragment() {
 
             main_fragment_beer_recycler.adapter = beersAdapter
 
-            // Decorations
+            // Decorations (space and line between elements)
 
             val spacingInPixels = resources.getDimensionPixelSize(R.dimen.padding_medium)
             val topBottomSpace = resources.getDimensionPixelSize(R.dimen.margin_small)
@@ -104,60 +112,30 @@ class MainFragment : Fragment() {
                 context!!,
                 topBottomSpace,
                 spacingInPixels,
-                leftRightSpace
+                0
             )
             main_fragment_beer_recycler.addItemDecoration(dividerItemDecoration)
         }
     }
 
-    fun orderList(ascending: Int) {
-        beersAdapter.order(ascending)
+
+    /**
+     * Order the list of beers
+     * @param direction to order
+     */
+    fun orderList(direction: AppConstants.Direction) {
+        beersAdapter.order(direction)
     }
 
+
+    /**
+     * Filter list by food
+     * @query food to query
+     */
     fun search(query: String?) {
-        // TODO: Limit number of calls to max 1 per second
+        // FIXME: Should limit number of calls to max 1 per second
         viewModel.refreshBeers(query)
         Log.d(TAG, "Searching for: $query")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "onDetach")
-
-    }
-
-    override fun onDestroyView() {
-        Log.d(TAG, "onDestroyView")
-
-        super.onDestroyView()
-    }
-
-
-    override fun onDestroy() {
-        Log.d(TAG, "onDestroy")
-
-        super.onDestroy()
-    }
-
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        Log.d(TAG, "onConfigurationChanged")
-
-    }
-
-    override fun onStop() {
-        Log.d(TAG, "onStop")
-
-        super.onStop()
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart")
-
     }
 
 }

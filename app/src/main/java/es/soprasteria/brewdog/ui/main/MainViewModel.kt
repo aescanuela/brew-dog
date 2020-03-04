@@ -8,14 +8,13 @@ import es.soprasteria.brewdog.model.Beer
 import es.soprasteria.brewdog.networking.PunkRepository
 
 
+/**
+ * ViewModel to manage the data for first screen (MainActivity + MainFragment)
+ */
 class MainViewModel : ViewModel() {
-
-    private val TAG = MainViewModel::class.java.simpleName
-
 
     private var punkRepository: PunkRepository? = null
 
-    //    private var beerMutableLiveData: MutableLiveData<ArrayList<Beer>>? = null
     private var beerMutableLiveData: MutableLiveData<ArrayList<Beer>>? = null
 
 
@@ -25,33 +24,28 @@ class MainViewModel : ViewModel() {
         }
         punkRepository = PunkRepository.instance
 
-        // TODO: Pagination
-//        beerMutableLiveData = punkRepository!!.fetchBeers(null)
-
-        // Observe only getBeers
+        // Observe changes on beers
         beerMutableLiveData = punkRepository!!.getBeers()
 
-        // Do first call - null will not send the GET parameter
+        // Do first call - null will not send the GET parameter, so it is safe
          punkRepository!!.fetchBeers(null)
-
-
     }
 
 
+    /**
+     * Get LiveData to observe
+     */
     fun getBeersRepository(): LiveData<ArrayList<Beer>>? {
         return beerMutableLiveData
     }
 
 
+    /**
+     * Refresh list of beers
+     * @param food: the food to query beers
+     */
     fun refreshBeers(food: String?) {
-      /*  beerMutableLiveData = */
             punkRepository!!.fetchBeers(if (food == null || food.isEmpty()) null else food)
-
-//        punkRepository!!.getBeers(if (food == null || food.isEmpty()) null else food)
-//
-//        beerMutableLiveData!!.postValue( punkRepository!!.getBeers(if (food == null || food.isEmpty()) null else food))
-
-        Log.d(TAG, "Searched for " + food + " and found " + beerMutableLiveData?.value?.size)
     }
 
 

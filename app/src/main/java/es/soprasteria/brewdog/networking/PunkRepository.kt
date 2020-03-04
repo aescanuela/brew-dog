@@ -2,26 +2,28 @@ package es.soprasteria.brewdog.networking
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import es.soprasteria.brewdog.MyApplication
 import es.soprasteria.brewdog.model.Beer
-import es.soprasteria.brewdog.utils.PreferenceUtils
+import es.soprasteria.brewdog.utils.Utils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+/**
+ * Repository to access to beers via Punk API
+ */
 class PunkRepository {
+
+    private val TAG = PunkRepository::class.java.simpleName
 
     private val punkApi: PunkApi = RetrofitService.cteateService(PunkApi::class.java)
 
-    companion object {
+    private val beerLiveData = MutableLiveData<ArrayList<Beer>>()
 
-        private val TAG = PunkRepository::class.java.simpleName
+    companion object {
 
         private var punkRepository: PunkRepository? = null
 
+        // Singleton pattern
         val instance: PunkRepository
             get() {
                 if (punkRepository == null) {
@@ -31,51 +33,31 @@ class PunkRepository {
             }
     }
 
-    // FIXME My alterations below:
-    private val beerLiveData = MutableLiveData<ArrayList<Beer>>()
 
-
+    /**
+     * Get LiveData to query beers
+     */
     fun getBeers(): MutableLiveData<ArrayList<Beer>> {
         return beerLiveData
     }
 
 
+    /**
+     * Update list of beers, searching by matching food
+     * @param food to match beers
+     * @return LiveData to observe for beers
+     */
     fun fetchBeers(food: String?): MutableLiveData<ArrayList<Beer>> {
 
-//        val beerResponse = MutableLiveData<ArrayList<Beer>>()
+        val resultInverse = Utils.parseSearchJson(food)
+        if (resultInverse != null) {
 
-        val foodToSearch = if (food.isNullOrEmpty()) {
-            "_empty_"
-        } else {
-            food
-        }
-
-
-        val gettPreff = PreferenceUtils.getStringPreference(
-            MyApplication.instance,
-            foodToSearch,
-            null
-        )
-
-//        val dbResult = MyApplication.instance!!.getDatabase().searchDao().load(foodToSearch)
-//        if (dbResult.value != null) {
-        if (gettPreff != null) {
-
-            try {
-                val gson = Gson()
-                val collectionType = object : TypeToken<Collection<Beer>>() {}.type
-//                val resultInverse =
-//                    gson.fromJson<ArrayList<Beer>>(dbResult.value?.result, collectionType)
-                val resultInverse =
-                    gson.fromJson<ArrayList<Beer>>(gettPreff, collectionType)
-
-                beerLiveData.postValue(resultInverse)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            // We have done this search before and have a saved result
+            beerLiveData.postValue(resultInverse)
 
         } else {
 
+            // We don't have saved results and have to query the API
             punkApi.getBeers(food)
                 .enqueue(object : Callback<ArrayList<Beer>> {
                     override fun onResponse(
@@ -83,54 +65,26 @@ class PunkRepository {
                         response: Response<ArrayList<Beer>>
                     ) {
                         if (response.isSuccessful) {
-//                        beerResponse.setValue(response.body())
 
+                            // Post the result to liveData
                             beerLiveData.postValue(response.body())
 
-
-                            // Save to DB
-                            val gson = Gson()
-                            val prefKey = if (food.isNullOrBlank()) {
-                                "_empty_"
-                            } else {
-                                food
-                            }
-
-                            // FIXME: --- saving to Prefs ---
-//                            val gson = Gson()
-//                            val prefKey = if (food.isNullOrBlank()) {
-//                                "_empty_"
-//                            } else {
-//                                food
-//                            }
-                            PreferenceUtils.setStringPreference(
-                                MyApplication.instance!!,
-                                prefKey,
-                                gson.toJson(response.body()).toString()
-                            )
-
-                            // FIXME: --- getting from Prefs ---
-//                        val gettPreff = PreferenceUtils.getStringPreference(
-//                            MyApplication.appContext,
-//                            prefKey,
-//                            null
-//                        )
-//                        val collectionType = object : TypeToken<Collection<Beer>>() {}.type
-//                        val resultInverse = gson.fromJson<ArrayList<Beer>>(gettPreff, collectionType)
+                            // Save in Preferences
+                            Utils.saveSearchResults(food, response.body())
 
                         } else {
                             Log.e(
                                 TAG,
                                 "Error calling fetchBeers: " + response.code() + " " + response.message()
                             )
+                            // Post the result to LiveData
+                            beerLiveData.postValue(null)
                         }
                     }
 
                     override fun onFailure(call: Call<ArrayList<Beer>>, t: Throwable) {
-//                    beerResponse.value = null
-
+                        // Post the result to LiveData
                         beerLiveData.postValue(null)
-
                         t.printStackTrace()
                     }
                 })

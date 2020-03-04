@@ -5,7 +5,9 @@ import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.widget.ImageView
 
-
+/**
+ * Async Task to download image
+ */
 class DownloadImageTask(
     internal var imageView: ImageView,
     internal var urlToDisplay: String

@@ -5,7 +5,9 @@ import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-
+/**
+ * Class that represents a Beer, used for Gson to deserialize.
+ */
 class Beer() : Parcelable {
 
     @SerializedName("id")
@@ -36,10 +38,6 @@ class Beer() : Parcelable {
     @Expose
     var abv: Double? = null
 
-    @SerializedName("food_pairing")
-    @Expose
-    var foodPairing: List<String>? = null
-
     constructor(parcel: Parcel) : this() {
         id = parcel.readValue(Long::class.java.classLoader) as? Long
         name = parcel.readString()
@@ -48,7 +46,6 @@ class Beer() : Parcelable {
         description = parcel.readString()
         imageUrl = parcel.readString()
         abv = parcel.readValue(Double::class.java.classLoader) as? Double
-        foodPairing = parcel.createStringArrayList()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -59,7 +56,6 @@ class Beer() : Parcelable {
         parcel.writeString(description)
         parcel.writeString(imageUrl)
         parcel.writeValue(abv)
-        parcel.writeStringList(foodPairing)
     }
 
     override fun describeContents(): Int {
